@@ -1,6 +1,6 @@
 """将颜色识别信息储存到文件
 color   0：红色；   1：绿色；   2：蓝色
-save    0：不保存；  1：：报错"""
+save    0：不保存；  1：保存"""
 import cv2
 import numpy as np
 

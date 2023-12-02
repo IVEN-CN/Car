@@ -1,11 +1,12 @@
-"""将颜色识别信息储存到文件"""
+"""将颜色识别信息储存到文件
+color   0：红色；   1：绿色；   2：蓝色
+save    0：不保存；  1：：报错"""
 import cv2
 import numpy as np
 
 
-
 def callback(x) -> None:
-    """trackbar回调函数"""
+    """trackbar回调空函数"""
     pass
 
 
@@ -38,7 +39,7 @@ if __name__ == '__main__':
     cv2.createTrackbar('lower_V', 'test', L_V, 255, callback)
     cv2.createTrackbar('upper_V', 'test', H_V, 255, callback)
     # 保存文件的trackbar
-    cv2.createTrackbar('save','test',0,1,save_color)
+    cv2.createTrackbar('save', 'test', 0, 1, save_color)
     # 创建颜色选项
     cv2.createTrackbar('color', 'test', 0, 2, callback)
     # endregion

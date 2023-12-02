@@ -1,7 +1,7 @@
 """将颜色识别信息储存到文件"""
 import cv2
 import numpy as np
-from tkinter import *
+
 
 
 def callback(x) -> None:

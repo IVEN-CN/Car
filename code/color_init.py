@@ -1,11 +1,22 @@
 """将颜色识别信息储存到文件"""
 import cv2
 import numpy as np
+from tkinter import *
 
 
-def callback(x):
+def callback(x) -> None:
     """trackbar回调函数"""
     pass
+
+
+def save_color(x) -> None:
+    """保存颜色信息的函数"""
+    global low_color, up_color, color
+    if x == 1:
+        data = np.vstack((low_color, up_color))
+        np.save(f'{color}.npy', data)
+    else:
+        pass
 
 
 if __name__ == '__main__':
@@ -26,6 +37,10 @@ if __name__ == '__main__':
     cv2.createTrackbar('upper_S', 'test', H_S, 255, callback)
     cv2.createTrackbar('lower_V', 'test', L_V, 255, callback)
     cv2.createTrackbar('upper_V', 'test', H_V, 255, callback)
+    # 保存文件的trackbar
+    cv2.createTrackbar('save','test',0,1,save_color)
+    # 创建颜色选项
+    cv2.createTrackbar('color', 'test', 0, 2, callback)
     # endregion
 
     while cap.isOpened():
@@ -42,15 +57,27 @@ if __name__ == '__main__':
         H_S = cv2.getTrackbarPos('upper_S', 'test')
         L_V = cv2.getTrackbarPos('lower_V', 'test')
         H_V = cv2.getTrackbarPos('upper_V', 'test')
+        _color = cv2.getTrackbarPos('color', 'test')
+        # endregion
+
+        # region 定义color
+        if _color == 0:
+            color = 'Red'
+        elif _color == 1:
+            color = 'Green'
+        elif _color == 2:
+            color = 'Blue'
         # endregion
 
         low_color = np.array([L_H, L_S, L_V])
         up_color = np.array([H_H, H_S, H_V])
+
         mask = cv2.inRange(img1, low_color, up_color)
 
         # 展示窗口
         cv2.imshow('test2', mask)
 
+        # win.mainloop()
         # esc退出
         if cv2.waitKey(1) == 27:
             break

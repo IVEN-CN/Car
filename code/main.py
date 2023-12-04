@@ -33,7 +33,7 @@ def detectCOLOR(lowrange, uprange):
             _img = cv2.cvtColor(frm, cv2.COLOR_BGR2GRAY)
             mask = cv2.inRange(_img, lowrange, uprange)
             if np.isin(check_arr, mask):
-                return mask, 1
+                return mask, 2
 
 
 def readfile(sign):
@@ -53,11 +53,11 @@ if __name__ == '__main__':
     ser = serial.Serial()  # 需要完善串口名和波特率(9600)
 
     info, sign = detectQR()
-    # 发送串口信号
+    # 发送串口信号：1
     ser.write(sign)
 
     # 颜色识别
     threshold = readfile(info)
     img,sing_dump = detectCOLOR(threshold[0],threshold[1])
-    # 发送串口信号
+    # 发送串口信号：2
     ser.write(sing_dump)

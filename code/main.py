@@ -60,3 +60,4 @@ if __name__ == '__main__':
     threshold = readfile(info)
     img,sing_dump = detectCOLOR(threshold[0],threshold[1])
     # 发送串口信号
+    ser.write(sing_dump)

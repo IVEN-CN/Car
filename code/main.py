@@ -13,7 +13,7 @@ import numpy as np
 check_arr = np.ones()  # 需要输入卷积核尺寸
 
 
-def detectQR(cap_) -> tuple:
+def detectQR(cap_) -> str:
     """识别二维码"""
     while cap_.isOpened():
         ret, frm = cap_.read()
@@ -22,10 +22,10 @@ def detectQR(cap_) -> tuple:
             det = cv2.QRCodeDetector()
             codeinfo, points, straight_qrcode = det.detectAndDecode(_img)
             if codeinfo != '':
-                return codeinfo, 1
+                return codeinfo
 
 
-def detectCOLOR(cap_, lowrange, uprange) -> tuple:
+def detectCOLOR(cap_, lowrange, uprange) -> str:
     """颜色识别函数"""
     # 创建摄像头对象
 
@@ -35,7 +35,7 @@ def detectCOLOR(cap_, lowrange, uprange) -> tuple:
             _img = cv2.cvtColor(frm, cv2.COLOR_BGR2GRAY)
             mask = cv2.inRange(_img, lowrange, uprange)
             if np.isin(check_arr, mask):
-                return mask, 2
+                return mask
 
 
 def readfile(sign) -> np.ndarray:
@@ -58,12 +58,12 @@ if __name__ == '__main__':
     # 创建串口对象
     ser = serial.Serial()  # 需要完善串口名和波特率(9600)
 
-    info, sign = detectQR(cap)
+    info = detectQR(cap)
     # 发送串口信号：1
-    ser.write(sign)
+    ser.write(b'1')
 
     # 颜色识别
     threshold = readfile(info)
-    img, sing_dump = detectCOLOR(cap, threshold[0], threshold[1])
+    img = detectCOLOR(cap, threshold[0], threshold[1])
     # 发送串口信号：2
-    ser.write(sing_dump)
+    ser.write(b'2')

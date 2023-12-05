@@ -9,7 +9,6 @@
 import cv2
 import serial
 import numpy as np
-import time
 import RPi.GPIO as IO
 
 check_arr = np.ones()  # 需要输入卷积核尺寸

@@ -53,15 +53,19 @@ def readfile(sign) -> np.ndarray:
     return arr
 
 
-def blink(point:int):
-    """point是针脚对应的BCM编码"""
-    IO.setmode(IO.BCM)
-    IO.setup(point,IO.OUT)
-    while True:
-        IO.output(point,IO.HIGH)
-        time.sleep(0.25)
-        IO.output(point, IO.LOW)
-        time.sleep(0.25)
+class LED:
+    def __init__(self, point):
+        """point是针脚对应的BCM编码"""
+        self.point = point
+        IO.setmode(IO.BCM)
+
+    def led_on(self):
+        IO.setup(self.point, IO.OUT)
+        IO.output(self.point, IO.HIGH)
+
+    def led_off(self):
+        IO.setup(self.point, IO.OUT)
+        IO.output(self.point, IO.LOW)
 
 
 if __name__ == '__main__':

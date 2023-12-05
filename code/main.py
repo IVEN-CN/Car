@@ -9,6 +9,8 @@
 import cv2
 import serial
 import numpy as np
+import time
+import RPi.GPIO as IO
 
 check_arr = np.ones()  # 需要输入卷积核尺寸
 
@@ -49,6 +51,17 @@ def readfile(sign) -> np.ndarray:
 
     arr = np.load(filename)
     return arr
+
+
+def blink(point:int):
+    """point是针脚对应的BCM编码"""
+    IO.setmode(IO.BCM)
+    IO.setup(point,IO.OUT)
+    while True:
+        IO.output(point,IO.HIGH)
+        time.sleep(0.25)
+        IO.output(point, IO.LOW)
+        time.sleep(0.25)
 
 
 if __name__ == '__main__':

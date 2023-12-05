@@ -69,7 +69,7 @@ if __name__ == '__main__':
     cap = cv2.VideoCapture(0)
 
     # 创建串口对象
-    ser = serial.Serial()  # 需要完善串口名和波特率(9600)
+    ser = serial.Serial('/dev/ttyAMA0', 9600)
 
     info = detectQR(cap)
     # 发送串口信号：1

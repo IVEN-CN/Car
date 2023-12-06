@@ -1,9 +1,6 @@
 """
 执行过程的主文件
-1.根据树莓派的串口设置串口名称和波特率（建立串口通信）
-3.创建一个合适大小的卷积核（用于颜色识别）
-4.如何让LED闪烁
-5.建立多线程，颜色识别和二维码识别的时候都要闪烁LED同时不影响画面流程，每个过程完成之后LED的颜色或者频率应该发生变化
+创建一个合适大小的卷积核（用于颜色识别）
 """
 import time
 import cv2
@@ -58,6 +55,7 @@ class LED:
         """point是针脚对应的BCM编码"""
         self.point = point
         IO.setmode(IO.BCM)
+        IO.setup(18,IO.OUT)
         self.ld = IO.PWM(self.point, 500)
         self.ld.start(0)
 

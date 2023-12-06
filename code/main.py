@@ -27,7 +27,7 @@ def detectQR(cap_) -> str:
                 return codeinfo
 
 
-def detectCOLOR(cap_, lowrange, uprange) -> str:
+def detectCOLOR(cap_, lowrange, uprange) -> cv2.Mat:
     """颜色识别函数"""
     # 创建摄像头对象
 

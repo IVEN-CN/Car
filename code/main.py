@@ -76,10 +76,12 @@ class LED:
     def __breath_up(self):
         for i in range(101):
             self.ld.ChangeDutyCycle(i)
+            time.sleep(0.05)
 
     def __breath_down(self):
         for i in range(100, 0, -1):
             self.ld.ChangeDutyCycle(i)
+            time.sleep(0.05)
 
     def breath(self):
         while 1:

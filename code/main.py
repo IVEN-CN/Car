@@ -24,7 +24,7 @@ def detectQR(cap_) -> str:
                 return codeinfo
 
 
-def detectCOLOR(cap_, lowrange, uprange) -> cv2.Mat:
+def detectCOLOR(cap_, lowrange, uprange) -> int:
     """颜色识别函数"""
     # 创建摄像头对象
 
@@ -34,7 +34,7 @@ def detectCOLOR(cap_, lowrange, uprange) -> cv2.Mat:
             _img = cv2.cvtColor(frm, cv2.COLOR_BGR2HSV)
             mask = cv2.inRange(_img, lowrange, uprange)
             if np.isin(check_arr, mask):
-                return mask
+                return 2
 
 
 def readfile(sign) -> np.ndarray:
@@ -133,7 +133,7 @@ if __name__ == '__main__':
         LED_green.led_on()
 
         # 识别颜色
-        img = detectCOLOR(cap, threshold[0], threshold[1])
+        detectCOLOR(cap, threshold[0], threshold[1])
 
         # 发送串口信号：2
         ser.write(b'2')

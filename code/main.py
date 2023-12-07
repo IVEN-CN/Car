@@ -31,8 +31,14 @@ def detectCOLOR(cap_, lowrange, uprange) -> int:
     while cap_.isOpened():
         ret, frm = cap_.read()
         if ret:
+            cv2.namedWindow('test1',0)
+            cv2.namedWindow('test2',0)
+            cv2.resizeWindow('test1',800,600)
+            cv2.resizeWindow('test2', 800, 600)
             _img = cv2.cvtColor(frm, cv2.COLOR_BGR2HSV)
             mask = cv2.inRange(_img, lowrange, uprange)
+            cv2.imshow('test1', mask)
+            cv2.imshow('test2', _img)
             if np.isin(check_arr, mask):
                 return 2
 
@@ -90,6 +96,7 @@ class LED:
 
 
 if __name__ == '__main__':
+    # region 创建对象
     # 创建摄像头对象
     cap = cv2.VideoCapture(0)
 
@@ -107,6 +114,7 @@ if __name__ == '__main__':
 
     # 创建闪烁LED,BCM 26号对应GPIO.25,用于指示算法结束
     LED_blink = LED(26)
+    # endregion
 
     def main():
 

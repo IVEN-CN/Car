@@ -31,7 +31,7 @@ def detectCOLOR(cap_, lowrange, uprange) -> cv2.Mat:
     while cap_.isOpened():
         ret, frm = cap_.read()
         if ret:
-            _img = cv2.cvtColor(frm, cv2.COLOR_BGR2GRAY)
+            _img = cv2.cvtColor(frm, cv2.COLOR_BGR2HSV)
             mask = cv2.inRange(_img, lowrange, uprange)
             if np.isin(check_arr, mask):
                 return mask

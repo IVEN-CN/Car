@@ -24,8 +24,8 @@ def detectQR(cap_) -> str:
 def detectCOLOR(cap_, lowrange, uprange, area):
     """颜色识别函数"""
     # 创建窗口
-    cv2.namedWindow('test1', cv2.WINDOW_NORMAL)
-    cv2.namedWindow('test2', cv2.WINDOW_NORMAL)
+    # cv2.namedWindow('test1', cv2.WINDOW_NORMAL)
+    # cv2.namedWindow('test2', cv2.WINDOW_NORMAL)
 
     while cap_.isOpened():
         ret, frm = cap_.read()
@@ -43,8 +43,8 @@ def detectCOLOR(cap_, lowrange, uprange, area):
                     if w * h >= area:
                         cv2.drawContours(frm, [brcnt], -1, (255, 255, 255), 2)
 
-                        cv2.imshow('test1', mask)
-                        cv2.imshow('test2', frm)
+                        # cv2.imshow('test1', mask)
+                        # cv2.imshow('test2', frm)
                         return w * h
 
 

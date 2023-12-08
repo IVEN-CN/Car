@@ -28,10 +28,6 @@ def detectCOLOR(cap_, lowrange, uprange, area):
     while cap_.isOpened():
         ret, frm = cap_.read()
         if ret:
-            cv2.namedWindow('test1', 0)
-            cv2.namedWindow('test2', 0)
-            cv2.resizeWindow('test1', 800, 600)
-            cv2.resizeWindow('test2', 800, 600)
             _img = cv2.cvtColor(frm, cv2.COLOR_BGR2HSV)
             mask = cv2.inRange(_img, lowrange, uprange)
             contours, hierarchy = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
@@ -44,9 +40,7 @@ def detectCOLOR(cap_, lowrange, uprange, area):
                     brcnt = np.array([[[x, y]], [[x + w, y]], [[x + w, y + h]], [[x, y + h]]])
                     if w * h >= area:
                         cv2.drawContours(frm, [brcnt], -1, (255, 255, 255), 2)
-                        # 调整图像大小
-                        cv2.resize(mask, (800, 600))
-                        cv2.resize(frm, (800, 600))
+
                         cv2.imshow('test1', mask)
                         cv2.imshow('test2', frm)
                         return w * h
@@ -112,6 +106,8 @@ if __name__ == '__main__':
     # region 创建对象
     # 创建摄像头对象
     cap = cv2.VideoCapture(0)
+    cap.set(4,400)
+    cap.set(3,200)
 
     # 创建串口对象
     ser = serial.Serial('/dev/ttyAMA0', 9600)

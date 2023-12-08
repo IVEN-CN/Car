@@ -33,7 +33,9 @@ if __name__ == '__main__':
     # 创建窗口
     cv2.namedWindow('test')
     # 打开摄像头
-    cap = cv2.VideoCapture(1)
+    cap = cv2.VideoCapture(0)
+    cap.set(4,400)
+    cap.set(3,200)
     # region 创建trackbar
     L_H = 0
     H_H = 180
@@ -59,6 +61,8 @@ if __name__ == '__main__':
     while cap.isOpened():
         # ret是读取标记，img是读取内容
         ret, img0 = cap.read()
+
+        h,w,c = img0.shape
 
         # 转换色彩空间
         img1 = cv2.cvtColor(img0, cv2.COLOR_BGR2HSV)
@@ -92,17 +96,14 @@ if __name__ == '__main__':
         contours, hierarchy = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         if not ret:
             break
-        else:
-            for contour in contours:
-                # 对每个轮廓进行矩形拟合
-                x, y, w, h = cv2.boundingRect(contour)
-                brcnt = np.array([[[x, y]], [[x + w, y]], [[x + w, y + h]], [[x, y + h]]])
-                if w * h >= area:
-                    cv2.drawContours(img0, [brcnt], -1, (255, 255, 255), 2)
 
-        # 调整图像大小
-        cv2.resize(mask, (800, 600))
-        cv2.resize(img0, (800, 600))
+        for contour in contours:
+            # 对每个轮廓进行矩形拟合
+            x, y, w, h = cv2.boundingRect(contour)
+            brcnt = np.array([[[x, y]], [[x + w, y]], [[x + w, y + h]], [[x, y + h]]])
+            if w * h >= area:
+                cv2.drawContours(img0, [brcnt], -1, (255, 255, 255), 2)
+
         # 展示窗口
         cv2.imshow('test2', mask)
         cv2.imshow('test1', img0)

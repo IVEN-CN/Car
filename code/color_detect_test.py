@@ -51,9 +51,12 @@ while cap.isOpened():
         for contour in contours:
             # 对每个轮廓进行矩形拟合
             x, y, w, h = cv2.boundingRect(contour)
-            brcnt = np.array([[[x, y]], [[x + w, y]], [[x + w, y + h]], [[x, y + h]]])
+            brcnt = np.array([[[x, y]],
+                              [[x + w, y]],
+                              [[x + w, y + h]],
+                              [[x, y + h]]])
             if w*h >= eara:
-                cv2.drawContours(frame, [brcnt], -1, (255, 255, 255), 2)
+                cv2.drawContours(frame, [brcnt], -1, (0, 255, 0), 2)
 
         cv2.imshow('oring', frame)
         cv2.imshow('color_detect', mask)

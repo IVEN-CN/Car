@@ -12,7 +12,7 @@ def callback(x) -> None:
 
 def save_color(x) -> None:
     """保存颜色信息的函数"""
-    global low_color, up_color, color, eara
+    global low_color, up_color, color
     if x == 1:
         data = np.vstack((low_color, up_color))
         np.save(f'{color}.npy', data)
@@ -20,11 +20,11 @@ def save_color(x) -> None:
         pass
 
 
-def save_eara(x) -> None:
+def save_area(x) -> None:
     """保存面积的函数"""
     global arr
     if x == 1:
-        np.save('eara.npy', arr)
+        np.save('area.npy', arr)
     else:
         pass
 
@@ -41,17 +41,17 @@ if __name__ == '__main__':
     H_S = 255
     L_V = 0
     H_V = 255
-    eara = 10000
+    area = 10000
     cv2.createTrackbar('lower_H', 'test', L_H, 180, callback)
     cv2.createTrackbar('upper_H', 'test', H_H, 180, callback)
     cv2.createTrackbar('lower_S', 'test', L_S, 255, callback)
     cv2.createTrackbar('upper_S', 'test', H_S, 255, callback)
     cv2.createTrackbar('lower_V', 'test', L_V, 255, callback)
     cv2.createTrackbar('upper_V', 'test', H_V, 255, callback)
-    cv2.createTrackbar('eara', 'test', eara, 10000, callback)
+    cv2.createTrackbar('area', 'test', area, 10000, callback)
     # 保存文件的trackbar
     cv2.createTrackbar('save_color', 'test', 0, 1, save_color)
-    cv2.createTrackbar('save_eara', 'test', 0, 1, save_eara)
+    cv2.createTrackbar('save_area', 'test', 0, 1, save_area)
     # 创建颜色选项
     cv2.createTrackbar('color', 'test', 0, 2, callback)
     # endregion
@@ -71,7 +71,7 @@ if __name__ == '__main__':
         L_V = cv2.getTrackbarPos('lower_V', 'test')
         H_V = cv2.getTrackbarPos('upper_V', 'test')
         _color = cv2.getTrackbarPos('color', 'test')
-        eara = cv2.getTrackbarPos('eara', 'test')
+        area = cv2.getTrackbarPos('area', 'test')
         # endregion
 
         # region 定义color
@@ -85,7 +85,7 @@ if __name__ == '__main__':
 
         low_color = np.array([L_H, L_S, L_V])
         up_color = np.array([H_H, H_S, H_V])
-        arr = np.array(eara)
+        arr = np.array(area)
 
         mask = cv2.inRange(img1, low_color, up_color)
 
@@ -97,7 +97,7 @@ if __name__ == '__main__':
                 # 对每个轮廓进行矩形拟合
                 x, y, w, h = cv2.boundingRect(contour)
                 brcnt = np.array([[[x, y]], [[x + w, y]], [[x + w, y + h]], [[x, y + h]]])
-                if w * h >= eara:
+                if w * h >= area:
                     cv2.drawContours(img0, [brcnt], -1, (255, 255, 255), 2)
 
         # 展示窗口

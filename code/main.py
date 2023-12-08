@@ -9,7 +9,7 @@ import numpy as np
 import threading
 import RPi.GPIO as IO
 
-check_arr = np.ones()  # 需要输入卷积核尺寸
+check_arr = np.ones((400,400))  # 需要输入卷积核尺寸
 
 
 def detectQR(cap_) -> str:

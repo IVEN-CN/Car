@@ -31,11 +31,11 @@ def save_area(x) -> None:
 
 if __name__ == '__main__':
     # 创建窗口
-    cv2.namedWindow('test')
+    cv2.namedWindow('test',cv2.WINDOW_NORMAL)
+    cv2.namedWindow('test1', cv2.WINDOW_NORMAL)
+    cv2.namedWindow('test1', cv2.WINDOW_NORMAL)
     # 打开摄像头
     cap = cv2.VideoCapture(0)
-    cap.set(4,400)
-    cap.set(3,200)
     # region 创建trackbar
     L_H = 0
     H_H = 180

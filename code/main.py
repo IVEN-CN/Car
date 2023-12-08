@@ -44,6 +44,9 @@ def detectCOLOR(cap_, lowrange, uprange, area):
                     brcnt = np.array([[[x, y]], [[x + w, y]], [[x + w, y + h]], [[x, y + h]]])
                     if w * h >= area:
                         cv2.drawContours(frm, [brcnt], -1, (255, 255, 255), 2)
+                        # 调整图像大小
+                        cv2.resize(mask, (800, 600))
+                        cv2.resize(frm, (800, 600))
                         cv2.imshow('test1', mask)
                         cv2.imshow('test2', frm)
                         return w * h
@@ -124,8 +127,6 @@ if __name__ == '__main__':
 
     # 创建闪烁LED,BCM 26号对应GPIO.25,用于指示算法结束
     LED_blink = LED(26)
-
-
     # endregion
 
     def main():
@@ -154,7 +155,7 @@ if __name__ == '__main__':
         LED_green.led_on()
 
         # 识别颜色
-        detectCOLOR(cap, threshold[0], threshold[1],area)
+        detectCOLOR(cap, threshold[0], threshold[1], area)
 
         # 发送串口信号：2
         ser.write(b'2')

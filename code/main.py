@@ -1,6 +1,5 @@
 """
 执行过程的主文件
-创建一个合适大小的卷积核（用于颜色识别）
 """
 import time
 import cv2
@@ -8,8 +7,6 @@ import serial
 import numpy as np
 import threading
 import RPi.GPIO as IO
-
-check_arr = np.ones((400,400))  # 需要输入卷积核尺寸
 
 
 def detectQR(cap_) -> str:
@@ -24,23 +21,32 @@ def detectQR(cap_) -> str:
                 return codeinfo
 
 
-def detectCOLOR(cap_, lowrange, uprange) -> int:
+def detectCOLOR(cap_, lowrange, uprange, area):
     """颜色识别函数"""
     # 创建摄像头对象
 
     while cap_.isOpened():
         ret, frm = cap_.read()
         if ret:
-            cv2.namedWindow('test1',0)
-            cv2.namedWindow('test2',0)
-            cv2.resizeWindow('test1',800,600)
+            cv2.namedWindow('test1', 0)
+            cv2.namedWindow('test2', 0)
+            cv2.resizeWindow('test1', 800, 600)
             cv2.resizeWindow('test2', 800, 600)
             _img = cv2.cvtColor(frm, cv2.COLOR_BGR2HSV)
             mask = cv2.inRange(_img, lowrange, uprange)
-            cv2.imshow('test1', mask)
-            cv2.imshow('test2', _img)
-            if np.isin(check_arr, mask):
-                return 2
+            contours, hierarchy = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+            if not ret:
+                break
+            else:
+                for contour in contours:
+                    # 对每个轮廓进行矩形拟合
+                    x, y, w, h = cv2.boundingRect(contour)
+                    brcnt = np.array([[[x, y]], [[x + w, y]], [[x + w, y + h]], [[x, y + h]]])
+                    if w * h >= area:
+                        cv2.drawContours(frm, [brcnt], -1, (255, 255, 255), 2)
+                        cv2.imshow('test1', mask)
+                        cv2.imshow('test2', frm)
+                        return w * h
 
 
 def readfile(sign) -> np.ndarray:
@@ -56,12 +62,16 @@ def readfile(sign) -> np.ndarray:
     return arr
 
 
+def read_area():
+    return np.load('area.npy')
+
+
 class LED:
     def __init__(self, point):
         """point是针脚对应的BCM编码"""
         self.point = point
         IO.setmode(IO.BCM)
-        IO.setup(18,IO.OUT)
+        IO.setup(18, IO.OUT)
         self.ld = IO.PWM(self.point, 500)
         self.ld.start(0)
 
@@ -114,10 +124,11 @@ if __name__ == '__main__':
 
     # 创建闪烁LED,BCM 26号对应GPIO.25,用于指示算法结束
     LED_blink = LED(26)
+
+
     # endregion
 
     def main():
-
         # region 二维码识别
         # 打开蓝色LED
         LED_blue.led_on()
@@ -137,11 +148,13 @@ if __name__ == '__main__':
         # 读取颜色信息
         threshold = readfile(info)
 
+        area = read_area()
+
         # 打开指示灯
         LED_green.led_on()
 
         # 识别颜色
-        detectCOLOR(cap, threshold[0], threshold[1])
+        detectCOLOR(cap, threshold[0], threshold[1],area)
 
         # 发送串口信号：2
         ser.write(b'2')
@@ -152,10 +165,12 @@ if __name__ == '__main__':
         threading.Thread(LED_blink.blink()).start()
         # endregion
 
+
     def breath():
         LED_breath.breath()
+
 
     # 创建主线程
     threading.Thread(target=main).start()
     # 创建子线程
-    threading.Thread(target=breath,daemon=True).start()
+    threading.Thread(target=breath, daemon=True).start()

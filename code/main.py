@@ -23,7 +23,9 @@ def detectQR(cap_) -> str:
 
 def detectCOLOR(cap_, lowrange, uprange, area):
     """颜色识别函数"""
-    # 创建摄像头对象
+    # 创建窗口
+    cv2.namedWindow('test1', cv2.WINDOW_NORMAL)
+    cv2.namedWindow('test2', cv2.WINDOW_NORMAL)
 
     while cap_.isOpened():
         ret, frm = cap_.read()
@@ -106,8 +108,6 @@ if __name__ == '__main__':
     # region 创建对象
     # 创建摄像头对象
     cap = cv2.VideoCapture(0)
-    cap.set(4,400)
-    cap.set(3,200)
 
     # 创建串口对象
     ser = serial.Serial('/dev/ttyAMA0', 9600)
@@ -123,6 +123,8 @@ if __name__ == '__main__':
 
     # 创建闪烁LED,BCM 26号对应GPIO.25,用于指示算法结束
     LED_blink = LED(26)
+
+
     # endregion
 
     def main():

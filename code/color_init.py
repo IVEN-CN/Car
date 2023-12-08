@@ -100,9 +100,12 @@ if __name__ == '__main__':
                 if w * h >= area:
                     cv2.drawContours(img0, [brcnt], -1, (255, 255, 255), 2)
 
+        # 调整图像大小
+        cv2.resize(mask, (800, 600))
+        cv2.resize(img0, (800, 600))
         # 展示窗口
         cv2.imshow('test2', mask)
-        cv2.imshow('test1',img0)
+        cv2.imshow('test1', img0)
 
         # win.mainloop()
         # esc退出

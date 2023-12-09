@@ -33,9 +33,12 @@ if __name__ == '__main__':
     # 创建窗口
     cv2.namedWindow('test',cv2.WINDOW_NORMAL)
     cv2.namedWindow('test1', cv2.WINDOW_NORMAL)
-    cv2.namedWindow('test1', cv2.WINDOW_NORMAL)
+    cv2.namedWindow('test2', cv2.WINDOW_NORMAL)
     # 打开摄像头
     cap = cv2.VideoCapture(0)
+    for i in range(1):
+        r,f = cap.read()
+        heigh,width,dimension = f.shape
     # region 创建trackbar
     L_H = 0
     H_H = 180
@@ -43,14 +46,14 @@ if __name__ == '__main__':
     H_S = 255
     L_V = 0
     H_V = 255
-    area = 10000
+    area = heigh*width
     cv2.createTrackbar('lower_H', 'test', L_H, 180, callback)
     cv2.createTrackbar('upper_H', 'test', H_H, 180, callback)
     cv2.createTrackbar('lower_S', 'test', L_S, 255, callback)
     cv2.createTrackbar('upper_S', 'test', H_S, 255, callback)
     cv2.createTrackbar('lower_V', 'test', L_V, 255, callback)
     cv2.createTrackbar('upper_V', 'test', H_V, 255, callback)
-    cv2.createTrackbar('area', 'test', area, 10000, callback)
+    cv2.createTrackbar('area', 'test', area, heigh*width, callback)
     # 保存文件的trackbar
     cv2.createTrackbar('save_color', 'test', 0, 1, save_color)
     cv2.createTrackbar('save_area', 'test', 0, 1, save_area)

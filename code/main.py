@@ -54,11 +54,11 @@ def readfile(sign) -> np.ndarray:
     """通过识别的二维码选择对应的颜色"""
     filename = ''
     if sign == '11':
-        filename = 'Red'
+        filename = 'Red.npy'
     if sign == '22':
-        filename = 'Green'
+        filename = 'Green.npy'
     if sign == '33':
-        filename = 'Blue'
+        filename = 'Blue.npy'
 
     arr = np.load(filename)
     return arr

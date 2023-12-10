@@ -74,8 +74,8 @@ class LED:
         self.point = point
         IO.setmode(IO.BCM)
         IO.setup(self.point, IO.OUT)
-        self.ld = IO.PWM(self.point, 500)
-        self.ld.start(0)
+        # self.ld = IO.PWM(self.point, 500)
+        # self.ld.start(0)
 
     def led_on(self):
         IO.setup(self.point, IO.OUT)
@@ -91,20 +91,20 @@ class LED:
         self.led_off()
         time.sleep(0.25)
 
-    def __breath_up(self):
-        for i in range(101):
-            self.ld.ChangeDutyCycle(i)
-            time.sleep(0.05)
-
-    def __breath_down(self):
-        for i in range(100, 0, -1):
-            self.ld.ChangeDutyCycle(i)
-            time.sleep(0.05)
-
-    def breath(self):
-        while 1:
-            self.__breath_up()
-            self.__breath_down()
+    # def __breath_up(self):
+    #     for i in range(101):
+    #         self.ld.ChangeDutyCycle(i)
+    #         time.sleep(0.05)
+    #
+    # def __breath_down(self):
+    #     for i in range(100, 0, -1):
+    #         self.ld.ChangeDutyCycle(i)
+    #         time.sleep(0.05)
+    #
+    # def breath(self):
+    #     while 1:
+    #         self.__breath_up()
+    #         self.__breath_down()
 
 
 if __name__ == '__main__':

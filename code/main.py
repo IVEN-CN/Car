@@ -52,6 +52,7 @@ def detectCOLOR(cap_, lowrange, uprange, area):
 
 def readfile(sign) -> np.ndarray:
     """通过识别的二维码选择对应的颜色"""
+    filename = ''
     if sign == '11':
         filename = 'Red'
     if sign == '22':
@@ -117,14 +118,14 @@ if __name__ == '__main__':
     # 创建蓝色LED对象,BCM 18号引脚是GPIO.1，用于指示二维码的识别
     LED_blue = LED(18)
 
-    # 创建绿色LED,BCM 12号对应GPIO.27,用于指示颜色识别
-    LED_green = LED(12)
-
-    # 创建呼吸灯对象，BCM 5号（GPIO.21)接正极，6号接负极,用于指示程序运行
-    LED_breath = LED(5)
-
-    # 创建闪烁LED,BCM 26号对应GPIO.25,用于指示算法结束
-    LED_blink = LED(26)
+    # # 创建绿色LED,BCM 12号对应GPIO.27,用于指示颜色识别
+    # LED_green = LED(12)
+    #
+    # # 创建呼吸灯对象，BCM 5号（GPIO.21)接正极，6号接负极,用于指示程序运行
+    # LED_breath = LED(5)
+    #
+    # # 创建闪烁LED,BCM 26号对应GPIO.25,用于指示算法结束
+    # LED_blink = LED(26)
     # endregion
 
     def main():
@@ -140,7 +141,7 @@ if __name__ == '__main__':
         # 关闭二维码指示LED
         LED_blue.led_off()
         # 添加闪烁进程
-        threading.Thread(LED_blink.blink()).start()
+        # threading.Thread(LED_blink.blink()).start()
         # endregion
 
         # region 颜色识别
@@ -150,7 +151,7 @@ if __name__ == '__main__':
         area = read_area()
 
         # 打开指示灯
-        LED_green.led_on()
+        # LED_green.led_on()
 
         # 识别颜色
         detectCOLOR(cap, threshold[0], threshold[1], area)
@@ -159,17 +160,17 @@ if __name__ == '__main__':
         ser.write(b'2')
 
         # 关闭指示灯
-        LED_green.led_off()
+        # LED_green.led_off()
         # 添加闪烁进程
-        threading.Thread(LED_blink.blink()).start()
+        threading.Thread(LED_blue.blink()).start()
         # endregion
 
 
-    def breath():
-        LED_breath.breath()
+    # def breath():
+    #     LED_breath.breath()
 
 
     # 创建主线程
     threading.Thread(target=main).start()
     # 创建子线程
-    threading.Thread(target=breath, daemon=True).start()
+    # threading.Thread(target=breath, daemon=True).start()

@@ -71,8 +71,8 @@ class LED:
     def __init__(self, point):
         """point是针脚对应的BCM编码"""
         self.point = point
-        IO.setup(self.point, IO.OUT)
         IO.setmode(IO.BCM)
+        IO.setup(self.point, IO.OUT)
         self.ld = IO.PWM(self.point, 500)
         self.ld.start(0)
 

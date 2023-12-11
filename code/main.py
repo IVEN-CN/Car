@@ -1,7 +1,6 @@
 """
 执行过程的主文件
-蓝色灯亮 -> 识别二维码 -> 识别完成 -> 发送信号1 -> 蓝色灯灭，并且闪烁红色灯 -> 绿色灯亮 -> 颜色识别 -> 识别完成 -> 发生信号2 -> 绿色灯灭，并且闪烁红色灯
-黄灯持续呼吸
+黄色灯亮 -> 识别二维码 -> 识别完成 -> 发送信号1 -> 黄色灯灭 -> 颜色识别 -> 识别完成 -> 发生信号2 ->黄色灯
 """
 import time
 import cv2
@@ -25,9 +24,6 @@ def detectQR(cap_) -> str:
 
 def detectCOLOR(cap_, lowrange, uprange, area):
     """颜色识别函数"""
-    # 创建窗口
-    # cv2.namedWindow('test1', cv2.WINDOW_NORMAL)
-    # cv2.namedWindow('test2', cv2.WINDOW_NORMAL)
 
     while cap_.isOpened():
         ret, frm = cap_.read()
@@ -45,8 +41,6 @@ def detectCOLOR(cap_, lowrange, uprange, area):
                     if w * h >= area:
                         cv2.drawContours(frm, [brcnt], -1, (255, 255, 255), 2)
 
-                        # cv2.imshow('test1', mask)
-                        # cv2.imshow('test2', frm)
                         return w * h
 
 
@@ -91,21 +85,6 @@ class LED:
         self.led_off()
         time.sleep(0.25)
 
-    # def __breath_up(self):
-    #     for i in range(101):
-    #         self.ld.ChangeDutyCycle(i)
-    #         time.sleep(0.05)
-    #
-    # def __breath_down(self):
-    #     for i in range(100, 0, -1):
-    #         self.ld.ChangeDutyCycle(i)
-    #         time.sleep(0.05)
-    #
-    # def breath(self):
-    #     while 1:
-    #         self.__breath_up()
-    #         self.__breath_down()
-
 
 if __name__ == '__main__':
     # region 创建对象
@@ -116,22 +95,13 @@ if __name__ == '__main__':
     ser = serial.Serial('/dev/ttyAMA0', 9600)
 
     # 创建蓝色LED对象,BCM 18号引脚是GPIO.1，用于指示二维码的识别
-    LED_blue = LED(18)
+    Led = LED(18)
 
-    # # 创建绿色LED,BCM 12号对应GPIO.27,用于指示颜色识别
-    # LED_green = LED(12)
-    #
-    # # 创建呼吸灯对象，BCM 5号（GPIO.21)接正极，6号接负极,用于指示程序运行
-    # LED_breath = LED(5)
-    #
-    # # 创建闪烁LED,BCM 26号对应GPIO.25,用于指示算法结束
-    # LED_blink = LED(26)
-    # endregion
 
     def main():
         # region 二维码识别
         # 打开蓝色LED
-        LED_blue.led_on()
+        Led.led_on()
 
         # 识别二维码
         info = detectQR(cap)
@@ -139,9 +109,7 @@ if __name__ == '__main__':
         ser.write(b'1')
 
         # 关闭二维码指示LED
-        LED_blue.led_off()
-        # 添加闪烁进程
-        # threading.Thread(LED_blink.blink()).start()
+        Led.led_off()
         # endregion
 
         # region 颜色识别
@@ -150,27 +118,15 @@ if __name__ == '__main__':
 
         area = read_area()
 
-        # 打开指示灯
-        # LED_green.led_on()
-
         # 识别颜色
         detectCOLOR(cap, threshold[0], threshold[1], area)
 
         # 发送串口信号：2
         ser.write(b'2')
 
-        # 关闭指示灯
-        # LED_green.led_off()
         # 添加闪烁进程
-        threading.Thread(LED_blue.blink()).start()
+        threading.Thread(Led.blink()).start()
         # endregion
-
-
-    # def breath():
-    #     LED_breath.breath()
-
 
     # 创建主线程
     threading.Thread(target=main).start()
-    # 创建子线程
-    # threading.Thread(target=breath, daemon=True).start()

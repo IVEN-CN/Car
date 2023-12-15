@@ -116,10 +116,13 @@ if __name__ == '__main__':
         # 读取颜色信息
         threshold = readfile(info)
 
+        thresholdL = threshold[0]
+        thresholdU = threshold[1]
+
         area = read_area()
 
         # 识别颜色
-        detectCOLOR(cap, threshold[0], threshold[1], area)
+        detectCOLOR(cap, thresholdL, thresholdU, area)
 
         # 发送串口信号：2
         ser.write(b'2')

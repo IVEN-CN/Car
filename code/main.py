@@ -49,16 +49,13 @@ def readfile(sign) -> np.ndarray:
     # filename = ''
     if sign == '11':
         filename = 'Red.npy'
-        arr = np.load(filename)
-        return arr
+        return np.load(filename)
     if sign == '22':
         filename = 'Green.npy'
-        arr = np.load(filename)
-        return arr
+        return np.load(filename)
     if sign == '33':
         filename = 'Blue.npy'
-        arr = np.load(filename)
-        return arr
+        return np.load(filename)
 
 
 def read_area():

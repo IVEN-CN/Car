@@ -114,10 +114,10 @@ if __name__ == '__main__':
 
         # region 颜色识别
         # 读取颜色信息
-        threshold = readfile(info)
+        # threshold = readfile(info)
 
-        thresholdL = threshold[0]
-        thresholdU = threshold[1]
+        thresholdL = readfile(info)[0]
+        thresholdU = readfile(info)[1]
 
         area = read_area()
 

@@ -44,18 +44,18 @@ def detectCOLOR(cap_, lowrange, uprange, area):
                         return w * h
 
 
-def readfile(sign) :
+def readfile(sign) -> np.ndarray:
     """通过识别的二维码选择对应的颜色"""
     # filename = ''
     if sign == '11':
         filename = 'Red.npy'
-        return np.load(filename)[0],np.load(filename)[1]
+        return np.load(filename)
     if sign == '22':
         filename = 'Green.npy'
-        return np.load(filename)[0],np.load(filename)[1]
+        return np.load(filename)
     if sign == '33':
         filename = 'Blue.npy'
-        return np.load(filename)[0],np.load(filename)[1]
+        return np.load(filename)
 
 
 def read_area():
@@ -114,8 +114,6 @@ if __name__ == '__main__':
 
         # region 颜色识别
         # 读取颜色信息
-        # threshold = readfile(info)
-
         threshold = readfile(info)
 
         area = read_area()

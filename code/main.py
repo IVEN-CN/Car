@@ -96,6 +96,7 @@ if __name__ == '__main__':
 
     # 创建蓝色LED对象,BCM 18号引脚是GPIO.1，用于指示二维码的识别
     Led = LED(18)
+    # endregion
 
 
     def main():

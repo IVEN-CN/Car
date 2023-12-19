@@ -1,6 +1,14 @@
 """
 执行过程的主文件
-黄色灯亮 -> 识别二维码 -> 识别完成 -> 发送信号1 -> 黄色灯灭 -> 颜色识别 -> 识别完成 -> 发生信号2 ->黄色灯
+1.黄色灯亮起，可能表示系统开始工作。
+2.系统开始识别二维码。
+3.二维码识别完成。
+4.发送信号1，可能是通知其他系统或者模块二维码识别已完成。
+5.黄色灯灭，可能表示二维码识别的阶段已经结束。
+6.开始颜色识别。
+7.颜色识别完成。
+8.发送信号2，可能是通知其他系统或者模块颜色识别已完成。
+9.黄色灯闪烁，可能表示整个过程结束。
 """
 import time
 import cv2
@@ -32,29 +40,24 @@ def detectCOLOR(cap_, lowrange, uprange, area):
             mask = cv2.inRange(_img, lowrange, uprange)
             contours, hierarchy = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
             if not ret:
-                break
-            else:
-                for contour in contours:
-                    # 对每个轮廓进行矩形拟合
-                    x, y, w, h = cv2.boundingRect(contour)
-                    brcnt = np.array([[[x, y]], [[x + w, y]], [[x + w, y + h]], [[x, y + h]]])
-                    if w * h >= area:
-                        cv2.drawContours(frm, [brcnt], -1, (255, 255, 255), 2)
-
-                        return w * h
+                return
+            for contour in contours:
+                # 对每个轮廓进行矩形拟合
+                x, y, w, h = cv2.boundingRect(contour)
+                brcnt = np.array([[[x, y]], [[x + w, y]], [[x + w, y + h]], [[x, y + h]]])
+                if w * h >= area:
+                    cv2.drawContours(frm, [brcnt], -1, (255, 255, 255), 2)
+                    return w * h
 
 
 def readfile(sign) -> np.ndarray:
     """通过识别的二维码选择对应的颜色"""
-    global filename
-    if sign[:2] == '11':
-        filename = 'Red.npy'
-    if sign[:2] == '22':
-        filename = 'Green.npy'
-    if sign[:2] == '33':
-        filename = 'Blue.npy'
-
-    arr = np.load(filename)
+    filename = {
+        '11': 'Red.npy',
+        '22': 'Green.npy',
+        '33': 'Blue.npy'
+    }
+    arr = np.load(filename.get(sign[:2], ''))
     return arr
 
 
@@ -68,15 +71,11 @@ class LED:
         self.point = point
         IO.setmode(IO.BCM)
         IO.setup(self.point, IO.OUT)
-        # self.ld = IO.PWM(self.point, 500)
-        # self.ld.start(0)
 
     def led_on(self):
-        IO.setup(self.point, IO.OUT)
         IO.output(self.point, IO.HIGH)
 
     def led_off(self):
-        IO.setup(self.point, IO.OUT)
         IO.output(self.point, IO.LOW)
 
     def blink(self):
@@ -94,14 +93,14 @@ if __name__ == '__main__':
     # 创建串口对象
     ser = serial.Serial('/dev/ttyAMA0', 9600)
 
-    # 创建蓝色LED对象,BCM 18号引脚是GPIO.1，用于指示二维码的识别
+    # 创建黄色LED对象,BCM 18号引脚是GPIO.1，用于指示二维码的识别
     Led = LED(18)
     # endregion
 
 
     def main():
         # region 二维码识别
-        # 打开蓝色LED
+        # 打开LED
         Led.led_on()
 
         # 识别二维码

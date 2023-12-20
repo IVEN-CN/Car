@@ -18,7 +18,7 @@ import threading
 import RPi.GPIO as IO
 
 
-def detectQR(cap_) -> str:
+def detectQR(cap_:cv2.Mat) -> str:
     """识别二维码"""
     while cap_.isOpened():
         ret, frm = cap_.read()
@@ -30,7 +30,10 @@ def detectQR(cap_) -> str:
                 return codeinfo
 
 
-def detectCOLOR(cap_, lowrange, uprange, area):
+def detectCOLOR(cap_:cv2.Mat, 
+                lowrange:np.ndarray,
+                uprange:np.ndarray, 
+                area:np.ndarray) -> bool:
     """颜色识别函数"""
 
     while cap_.isOpened():
@@ -40,14 +43,14 @@ def detectCOLOR(cap_, lowrange, uprange, area):
             mask = cv2.inRange(_img, lowrange, uprange)
             contours, hierarchy = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
             if not ret:
-                return
+                return False
             for contour in contours:
                 # 对每个轮廓进行矩形拟合
                 x, y, w, h = cv2.boundingRect(contour)
                 brcnt = np.array([[[x, y]], [[x + w, y]], [[x + w, y + h]], [[x, y + h]]])
                 if w * h >= area:
                     cv2.drawContours(frm, [brcnt], -1, (255, 255, 255), 2)
-                    return w * h
+                    return True
 
 
 def readfile(sign) -> np.ndarray:
@@ -61,7 +64,7 @@ def readfile(sign) -> np.ndarray:
     return arr
 
 
-def read_area():
+def read_area() -> np.ndarray:
     return np.load('area.npy')
 
 

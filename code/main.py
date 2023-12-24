@@ -59,8 +59,7 @@ def readfile(sign) -> np.ndarray:
         '22': 'Green.npy',
         '33': 'Blue.npy'
     }
-    arr = np.load(filename.get(sign[:2], ''))
-    return arr
+    return np.load(filename.get(sign[:2], None))
 
 
 def read_area() -> np.ndarray:
@@ -107,6 +106,7 @@ if __name__ == '__main__':
 
         # 识别二维码
         info = detectQR(cap)
+        print(info)
 
         # 关闭二维码指示LED
         Led.led_off()

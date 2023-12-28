@@ -24,7 +24,7 @@ def detectQR(cap_:cv2.Mat) -> str:
         if ret:
             _img = cv2.cvtColor(frm, cv2.COLOR_BGR2GRAY)
             det = cv2.QRCodeDetector()
-            codeinfo, points, straight_qrcode = det.detectAndDecode(_img)
+            codeinfo, _, _ = det.detectAndDecode(_img)
             if codeinfo != '':
                 return codeinfo
 

@@ -40,7 +40,10 @@ def detectCOLOR(cap_:cv2.Mat,
         if ret:
             _img = cv2.cvtColor(frm, cv2.COLOR_BGR2HSV)
             mask = cv2.inRange(_img, lowrange, uprange)
-            contours, hierarchy = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+            # contours是轮廓集，hierarchy是轮廓属性
+            contours, hierarchy = cv2.findContours(mask,                    # 二值图像
+                                                   cv2.RETR_TREE,           # 轮廓检索模式
+                                                   cv2.CHAIN_APPROX_SIMPLE) # 轮廓近似方法
             if not ret:
                 return False
             for contour in contours:
